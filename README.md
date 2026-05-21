@@ -37,9 +37,12 @@ A memory starts as a `MemoryRecord`, can be retrieved by query and tags, correct
 ## Quickstart
 
 ```bash
+git clone https://github.com/aditya89bh/memory-agent-sdk.git
+cd memory-agent-sdk
 python -m venv .venv
 source .venv/bin/activate
 pip install -e ".[dev]"
+pytest
 ```
 
 ## Example usage
@@ -48,10 +51,27 @@ pip install -e ".[dev]"
 from memory_agent_sdk import Memory, InMemoryStore
 
 memory = Memory(store=InMemoryStore())
-record = memory.remember("User prefers concise answers", tags=["preference"], importance=0.9)
-results = memory.retrieve("concise", tags=["preference"])
+
+record = memory.remember(
+    "User prefers concise Python examples",
+    tags=["preference"],
+    importance=0.9,
+)
+
+results = memory.retrieve("Python preference", tags=["preference"])
+
 print(record.id)
 print(results[0].text)
+```
+
+## Runnable examples
+
+```bash
+python examples/basic_session_memory.py
+python examples/retrieval_demo.py
+python examples/correction_demo.py
+python examples/forgetting_demo.py
+python examples/agent_loop_demo.py
 ```
 
 ## Tests
