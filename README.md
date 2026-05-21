@@ -74,6 +74,34 @@ python examples/forgetting_demo.py
 python examples/agent_loop_demo.py
 ```
 
+## Core primitives
+
+| Primitive | Purpose |
+|---|---|
+| `Memory` | High-level API for remembering, retrieving, correcting, forgetting, and reading audit events. |
+| `SessionMemory` | Short-lived conversational turns for an active interaction. |
+| `MemoryRecord` | Data object for one long-term memory item. |
+| `MemoryPolicy` | Rules for deciding what should be remembered or ignored. |
+| `InMemoryStore` | Fast ephemeral store for tests and demos. |
+| `JSONStore` | Simple file-backed persistence for small local projects. |
+| `SQLiteStore` | Durable local persistence using the Python standard library. |
+| Retrieval helpers | Keyword overlap, recency, importance, and tag-based filtering. |
+| Correction helpers | Supersede old memory records while preserving history. |
+| Forgetting helpers | Soft-delete memories by id, text match, tag, or expiry. |
+| Audit events | Track created, retrieved, corrected, forgotten, and expired memory operations. |
+
+## Design principles
+
+- **Standard library first:** no LangChain, OpenAI API, vector database, or hosted service dependency in v0.1.
+- **Readable over clever:** each primitive should be understandable by agent builders.
+- **Lifecycle-aware:** memory is not just storage; it needs retrieval, correction, forgetting, and auditability.
+- **Framework-neutral:** the SDK should be usable from any agent loop or application.
+- **Portfolio-grade honesty:** useful primitives and examples, but not positioned as production infrastructure yet.
+
+## Current status
+
+This repo is an early SDK/prototype for demonstrating memory architecture. It is suitable for learning, portfolio work, local experiments, and extension into future integrations. It is not yet hardened for production scale, concurrent writes, distributed storage, or sensitive data governance.
+
 ## Tests
 
 ```bash
@@ -82,4 +110,8 @@ pytest
 
 ## Roadmap
 
-Placeholder for v0.2 ideas: richer policy hooks, export/import tools, deterministic summarization helpers, and optional adapters.
+- Add richer policy hooks for custom memory filtering.
+- Add deterministic summarization helpers.
+- Add import/export utilities for memory records and audit logs.
+- Add more examples for agent loops and task memory.
+- Consider optional adapters for agent frameworks later, while keeping the core dependency-free.
