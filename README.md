@@ -8,6 +8,32 @@ Most agent demos either keep memory hidden inside a framework or skip memory lif
 
 This is not a production agent framework. It is a clean, portfolio-grade SDK for experimenting with memory architecture using only the Python standard library in v0.1.
 
+## Architecture
+
+```text
+Agent / app code
+    ↓
+Memory API
+    ↓
+MemoryPolicy ── decides what should be remembered or ignored
+    ↓
+Store ── InMemoryStore, JSONStore, or SQLiteStore
+    ↓
+Retrieval / Correction / Forgetting
+    ↓
+Audit events
+```
+
+The SDK keeps each memory concern separate. Stores persist records, retrieval ranks them, correction preserves superseded history, forgetting marks memories inactive, and events provide a lightweight audit trail.
+
+## Memory lifecycle
+
+```text
+remember → retrieve → correct → forget / expire → audit
+```
+
+A memory starts as a `MemoryRecord`, can be retrieved by query and tags, corrected without losing the previous version, and eventually forgotten or expired. Each major action emits an audit event so agent builders can inspect memory behavior during development.
+
 ## Quickstart
 
 ```bash
