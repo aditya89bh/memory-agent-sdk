@@ -1,8 +1,12 @@
 # Memory Agent SDK
 
-Reusable memory primitives for AI agent developers: session memory, long-term memory, retrieval, correction, forgetting, memory policies, and audit events.
+Reusable memory primitives for AI agent developers.
 
-This is a lightweight portfolio-grade tooling repo, not a production framework. v0.1 uses only the Python standard library.
+`memory-agent-sdk` is a lightweight Python toolkit for adding inspectable memory behavior to agent prototypes without committing to a full framework. It gives developers simple building blocks for session memory, long-term memory, retrieval, correction, forgetting, policies, and audit events.
+
+Most agent demos either keep memory hidden inside a framework or skip memory lifecycle concerns entirely. This repo makes those primitives explicit so developers can see what was remembered, why it was retrieved, how it was corrected, and when it was forgotten.
+
+This is not a production agent framework. It is a clean, portfolio-grade SDK for experimenting with memory architecture using only the Python standard library in v0.1.
 
 ## Quickstart
 
