@@ -1,5 +1,7 @@
 # Memory Agent SDK
 
+[![CI](https://github.com/aditya89bh/memory-agent-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/aditya89bh/memory-agent-sdk/actions/workflows/ci.yml)
+
 Reusable memory primitives for AI agent developers.
 
 `memory-agent-sdk` is a lightweight Python toolkit for adding inspectable memory behavior to agent prototypes without committing to a full framework. It gives developers simple building blocks for session memory, long-term memory, retrieval, correction, forgetting, policies, and audit events.
