@@ -53,6 +53,30 @@ results = memory.retrieve("concise answers", tags=["preference"])
 
 Returns a list of `RetrievalResult` objects. Retrieval also expires outdated memories before searching and records a `MEMORY_RETRIEVED` event.
 
+### `retrieve_trace(query, tags=None, limit=5)`
+
+Runs retrieval and returns diagnostic metadata with the ranked results.
+
+```python
+trace = memory.retrieve_trace("concise answers", tags=["preference"])
+
+print(trace.candidates_seen)
+print(trace.candidates_scored)
+print(trace.results)
+print(trace.rejected)
+```
+
+Returns a `RetrievalTrace` object with:
+
+- `query`: query string used for retrieval.
+- `requested_tags`: tags requested by the caller.
+- `candidates_seen`: number of memory records considered.
+- `candidates_scored`: number of candidates that passed filters and were scored.
+- `results`: ranked `RetrievalResult` objects.
+- `rejected`: skipped records with rejection reasons.
+
+A traced retrieval records a normal `MEMORY_RETRIEVED` audit event with `trace: True` in event details.
+
 ### `correct(new_text, memory_id=None, text_match=None, tags=None, importance=None)`
 
 Corrects an existing memory by id or by text match.
@@ -73,7 +97,7 @@ Current behavior:
 - adds `corrects` metadata to the new memory
 - records a `MEMORY_CORRECTED` audit event
 
-Raises `ValueError` if no matching memory is found.
+Raises `MemoryNotFoundError` if no matching memory is found.
 
 ### `forget(memory_id=None, text_match=None, tag=None, soft_delete=True)`
 
@@ -85,7 +109,7 @@ memory.forget(tag="temporary")
 
 Current behavior marks matching memories as `FORGOTTEN` and records `MEMORY_FORGOTTEN` audit events. The `soft_delete` parameter is recorded in event details, but the current implementation uses status-based soft deletion.
 
-Raises `ValueError` if no selector is provided.
+Raises `MemoryInputError` if no selector is provided.
 
 ### `events()`
 
@@ -95,6 +119,45 @@ Returns audit events from the active store.
 for event in memory.events():
     print(event.type, event.memory_id)
 ```
+
+## RetrievalResult
+
+`RetrievalResult` represents one ranked retrieval result.
+
+Fields:
+
+- `record`: original `MemoryRecord`.
+- `score`: combined retrieval score.
+- `keyword_score`: query-to-memory keyword overlap score.
+- `recency_score`: recency contribution.
+- `importance_score`: importance contribution.
+- `text`: convenience property for `record.text`.
+- `id`: convenience property for `record.id`.
+
+## RetrievalTrace
+
+`RetrievalTrace` represents a traced retrieval run.
+
+Fields:
+
+- `query`
+- `requested_tags`
+- `candidates_seen`
+- `candidates_scored`
+- `rejected`
+- `results`
+
+Rejected entries are dictionaries with:
+
+- `id`: memory id.
+- `reason`: rejection reason.
+
+Current rejection reasons include:
+
+- `deleted`
+- `expired`
+- `tag_mismatch`
+- `no_keyword_overlap`
 
 ## SessionMemory
 
@@ -187,6 +250,8 @@ When tags are provided, returned memories must contain all requested tags.
 
 Expired, forgotten, and otherwise deleted memories are excluded.
 
+Use `retrieve_trace()` when you need to inspect candidates, score fields, and rejection reasons.
+
 ## Correction behavior
 
 Correction preserves history rather than overwriting in place.
@@ -233,6 +298,27 @@ Methods:
 
 - `should_ignore(text, tags=None)`
 - `should_remember(text, tags=None)`
+
+## Exceptions
+
+The package exposes SDK-specific exception classes:
+
+- `MemoryAgentSDKError`: base exception for SDK errors.
+- `MemoryInputError`: invalid memory operation input.
+- `MemoryNotFoundError`: requested memory record could not be found.
+
+Example:
+
+```python
+from memory_agent_sdk import Memory, MemoryNotFoundError
+
+memory = Memory()
+
+try:
+    memory.correct(memory_id="missing", new_text="Updated memory")
+except MemoryNotFoundError:
+    print("No matching memory found")
+```
 
 ## Audit events
 
