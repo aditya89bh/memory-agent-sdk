@@ -102,6 +102,7 @@ python examples/memory_lifecycle_demo.py
 | [Retrieval Diagnostics](docs/retrieval_diagnostics.md) | How retrieval scoring works and how to debug unexpected results. |
 | [Comparison](docs/comparison.md) | How this approach compares to chat history, prompt stuffing, vector memory, and full agent platforms. |
 | [Production Readiness](docs/production_readiness.md) | Current maturity, gaps, and roadmap toward production-grade use. |
+| [Developer-Grade Hardening](docs/developer_grade_hardening.md) | Maturity path from portfolio-grade repo to reusable developer tool. |
 | [Release Checklist](docs/release_checklist.md) | Release validation steps, versioning guidance, and release note template. |
 | [Repo Audit](docs/repo_audit.md) | Current status, completed areas, limitations, and next roadmap items. |
 | [Roadmap](docs/roadmap.md) | Planned future improvements. |
