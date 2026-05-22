@@ -1,6 +1,7 @@
 from datetime import datetime
 from .correction import correct_memory
 from .events import AuditEvent, EventType
+from .exceptions import MemoryInputError
 from .forgetting import forget_by_id, forget_by_tag, forget_by_text, forget_expired
 from .policies import MemoryPolicy
 from .retrieval import retrieve_records
@@ -19,6 +20,6 @@ class Memory:
         if memory_id: return forget_by_id(self.store,memory_id,soft_delete)
         if text_match: return forget_by_text(self.store,text_match,soft_delete)
         if tag: return forget_by_tag(self.store,tag,soft_delete)
-        raise ValueError("Provide memory_id, text_match, or tag")
+        raise MemoryInputError("Provide memory_id, text_match, or tag")
     def forget_expired(self): return forget_expired(self.store)
     def events(self): return self.store.events()
