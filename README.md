@@ -100,6 +100,7 @@ python examples/memory_lifecycle_demo.py
 | [Memory Lifecycle](docs/memory_lifecycle.md) | How memories move through remember, retrieve, correct, forget, and audit stages. |
 | [Memory Lifecycle Diagram](docs/memory_lifecycle_diagram.md) | Visual ASCII diagram of the memory loop and where each primitive fits. |
 | [Retrieval Diagnostics](docs/retrieval_diagnostics.md) | How retrieval scoring works and how to debug unexpected results. |
+| [Retrieval Trace API](docs/retrieval_trace_api.md) | How to inspect candidates, scores, rejection reasons, and traced retrieval events. |
 | [Comparison](docs/comparison.md) | How this approach compares to chat history, prompt stuffing, vector memory, and full agent platforms. |
 | [Production Readiness](docs/production_readiness.md) | Current maturity, gaps, and roadmap toward production-grade use. |
 | [Developer-Grade Hardening](docs/developer_grade_hardening.md) | Maturity path from portfolio-grade repo to reusable developer tool. |
