@@ -13,7 +13,14 @@ authors = [{name = "Aditya"}]
 dependencies = []
 
 [project.optional-dependencies]
-dev = ["pytest>=8"]
+dev = ["pytest>=8", "ruff>=0.8"]
 
 [tool.setuptools.packages.find]
 include = ["memory_agent_sdk*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["F"]
