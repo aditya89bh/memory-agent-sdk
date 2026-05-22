@@ -36,6 +36,14 @@ remember → retrieve → correct → forget / expire → audit
 
 A memory starts as a `MemoryRecord`, can be retrieved by query and tags, corrected without losing the previous version, and eventually forgotten or expired. Each major action emits an audit event so agent builders can inspect memory behavior during development.
 
+For the full flow, run:
+
+```bash
+python examples/memory_lifecycle_demo.py
+```
+
+This demo walks through storing memories, retrieving relevant context, correcting stale information, forgetting temporary state, and inspecting audit events.
+
 ## Quickstart
 
 ```bash
@@ -74,6 +82,13 @@ python examples/retrieval_demo.py
 python examples/correction_demo.py
 python examples/forgetting_demo.py
 python examples/agent_loop_demo.py
+python examples/memory_lifecycle_demo.py
+```
+
+Recommended first demo:
+
+```bash
+python examples/memory_lifecycle_demo.py
 ```
 
 ## Core primitives
