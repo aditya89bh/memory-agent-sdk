@@ -8,7 +8,7 @@ Reusable memory primitives for AI agent developers.
 
 Most agent demos either keep memory hidden inside a framework or skip memory lifecycle concerns entirely. This repo makes those primitives explicit so developers can see what was remembered, why it was retrieved, how it was corrected, and when it was forgotten.
 
-This is not a production agent framework. It is a clean, portfolio-grade SDK for experimenting with memory architecture using only the Python standard library in v0.1.
+This is not a production agent framework. It is a clean, developer-grade SDK foundation for experimenting with memory architecture using only the Python standard library in v0.1.
 
 ## Architecture
 
@@ -43,6 +43,34 @@ python examples/memory_lifecycle_demo.py
 ```
 
 This demo walks through storing memories, retrieving relevant context, correcting stale information, forgetting temporary state, and inspecting audit events.
+
+## Developer-grade status
+
+This repo has moved beyond a pure portfolio demo and is now being hardened as a developer-grade SDK foundation.
+
+Current developer-grade signals:
+
+- installable Python package
+- public API reference
+- typed package marker through `py.typed`
+- Ruff linting in CI
+- GitHub Actions test matrix for Python 3.10, 3.11, and 3.12
+- custom SDK exceptions
+- retrieval trace API for inspectable ranking behavior
+- JSON and SQLite persistence tests
+- policy, correction, forgetting, expiry, and serialization tests
+- release checklist, security notes, contributor docs, issue templates, and PR template
+
+Still not production-grade:
+
+- no encryption layer
+- no migration system
+- no concurrency guarantees
+- no semantic/vector retrieval adapters
+- no stable backward-compatibility policy yet
+- no published package release workflow yet
+
+See [Developer-Grade Hardening](docs/developer_grade_hardening.md) and [Production Readiness](docs/production_readiness.md) for the maturity roadmap.
 
 ## Quickstart
 
@@ -124,6 +152,7 @@ python examples/memory_lifecycle_demo.py
 | `InMemoryStore` | Fast ephemeral store for tests and demos. |
 | `JSONStore` | Simple file-backed persistence for small local projects. |
 | `SQLiteStore` | Durable local persistence using the Python standard library. |
+| `RetrievalTrace` | Diagnostic object for inspecting retrieval candidates, scores, and rejection reasons. |
 | Retrieval helpers | Keyword overlap, recency, importance, and tag-based filtering. |
 | Correction helpers | Supersede old memory records while preserving history. |
 | Forgetting helpers | Soft-delete memories by id, text match, tag, or expiry. |
@@ -135,11 +164,11 @@ python examples/memory_lifecycle_demo.py
 - **Readable over clever:** each primitive should be understandable by agent builders.
 - **Lifecycle-aware:** memory is not just storage; it needs retrieval, correction, forgetting, and auditability.
 - **Framework-neutral:** the SDK should be usable from any agent loop or application.
-- **Portfolio-grade honesty:** useful primitives and examples, but not positioned as production infrastructure yet.
+- **Honest maturity:** developer-grade hardening is underway, but production-readiness is still explicitly scoped as future work.
 
 ## Current status
 
-This repo is an early SDK/prototype for demonstrating memory architecture. It is suitable for learning, portfolio work, local experiments, and extension into future integrations. It is not yet hardened for production scale, concurrent writes, distributed storage, or sensitive data governance.
+This repo is an experimental SDK foundation for demonstrating memory architecture. It is suitable for learning, local experiments, developer exploration, and extension into future integrations. It is not yet hardened for production scale, concurrent writes, distributed storage, or sensitive data governance.
 
 ## Tests
 
@@ -152,5 +181,5 @@ pytest
 - Add richer policy hooks for custom memory filtering.
 - Add deterministic summarization helpers.
 - Add import/export utilities for memory records and audit logs.
-- Add more examples for agent loops and task memory.
-- Consider optional adapters for agent frameworks later, while keeping the core dependency-free.
+- Add memory evaluation harnesses.
+- Add optional adapter interfaces for embeddings and vector stores later, while keeping the core dependency-free.
