@@ -3,6 +3,10 @@ from datetime import datetime, timedelta, timezone
 from memory_agent_sdk import EventType, Memory, MemoryStatus
 
 
+def get_record_including_deleted(memory, memory_id):
+    return next(record for record in memory.store.all(include_deleted=True) if record.id == memory_id)
+
+
 def test_expired_memory_is_marked_expired_before_retrieval():
     memory = Memory()
     expired_at = datetime.now(timezone.utc) - timedelta(minutes=1)
@@ -14,7 +18,7 @@ def test_expired_memory_is_marked_expired_before_retrieval():
     )
 
     results = memory.retrieve("Temporary memory")
-    stored = memory.store.get(record.id, include_deleted=True)
+    stored = get_record_including_deleted(memory, record.id)
 
     assert results == []
     assert stored.status == MemoryStatus.EXPIRED
@@ -43,11 +47,11 @@ def test_forget_expired_returns_expired_records():
     expired = memory.forget_expired()
 
     assert [record.id for record in expired] == [expired_record.id]
-    assert memory.store.get(expired_record.id, include_deleted=True).status == MemoryStatus.EXPIRED
+    assert get_record_including_deleted(memory, expired_record.id).status == MemoryStatus.EXPIRED
     assert memory.store.get(active_record.id).status == MemoryStatus.ACTIVE
 
 
-def test_retrieval_trace_reports_expired_rejection_after_expiry_processing():
+def test_retrieval_trace_excludes_expired_memory_after_expiry_processing():
     memory = Memory()
     expired_at = datetime.now(timezone.utc) - timedelta(minutes=1)
 
@@ -63,4 +67,4 @@ def test_retrieval_trace_reports_expired_rejection_after_expiry_processing():
     assert trace.candidates_seen == 0
     assert trace.candidates_scored == 0
     assert trace.rejected == []
-    assert memory.store.get(record.id, include_deleted=True).status == MemoryStatus.EXPIRED
+    assert get_record_including_deleted(memory, record.id).status == MemoryStatus.EXPIRED
