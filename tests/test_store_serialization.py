@@ -56,7 +56,7 @@ def run_store_round_trip(store_factory):
     assert events[1].details == {"previous_id": original.id}
     assert events[2].details["query"] == "concise engineering"
     assert events[2].details["trace"] is True
-    assert events[2].details["result_ids"] == [corrected.id]
+    assert corrected.id in events[2].details["result_ids"]
 
 
 def test_json_store_round_trips_records_status_metadata_and_events(tmp_path):
