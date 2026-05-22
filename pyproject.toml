@@ -18,6 +18,9 @@ dev = ["pytest>=8", "ruff>=0.8"]
 [tool.setuptools.packages.find]
 include = ["memory_agent_sdk*"]
 
+[tool.setuptools.package-data]
+memory_agent_sdk = ["py.typed"]
+
 [tool.ruff]
 line-length = 100
 target-version = "py310"
