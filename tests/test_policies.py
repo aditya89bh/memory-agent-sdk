@@ -1,12 +1,62 @@
 from memory_agent_sdk import Memory, MemoryPolicy
 
-def test_policy_ignores_small_talk_and_sensitive_text_by_default():
-    p=MemoryPolicy(); assert p.should_ignore("hey"); assert p.should_ignore("my password is abc"); assert not p.should_remember("my password is abc")
 
-def test_policy_flags_control_preferences_and_tasks():
-    p=MemoryPolicy(remember_preferences=False, remember_tasks=False)
-    assert p.should_ignore("User likes short answers",tags=["preference"])
-    assert p.should_ignore("Ship the feature",tags=["task"])
+def test_policy_ignores_empty_text():
+    policy = MemoryPolicy()
 
-def test_memory_uses_policy_before_remembering():
-    m=Memory(policy=MemoryPolicy(ignore_small_talk=True)); assert m.remember("hey") is None; assert m.store.all()==[]
+    assert policy.should_remember("   ") is False
+
+
+def test_policy_ignores_small_talk_by_default():
+    memory = Memory(policy=MemoryPolicy())
+
+    record = memory.remember("hello")
+
+    assert record is None
+    assert memory.store.all() == []
+    assert memory.events() == []
+
+
+def test_policy_can_allow_small_talk():
+    memory = Memory(policy=MemoryPolicy(ignore_small_talk=False))
+
+    record = memory.remember("hello")
+
+    assert record is not None
+    assert record.text == "hello"
+
+
+def test_policy_blocks_sensitive_terms_by_default():
+    memory = Memory(policy=MemoryPolicy())
+
+    record = memory.remember("The API key is abc123")
+
+    assert record is None
+    assert memory.store.all() == []
+
+
+def test_policy_can_allow_sensitive_terms():
+    memory = Memory(policy=MemoryPolicy(allow_sensitive=True))
+
+    record = memory.remember("The API key is abc123")
+
+    assert record is not None
+    assert record.text == "The API key is abc123"
+
+
+def test_policy_can_disable_preference_memory():
+    memory = Memory(policy=MemoryPolicy(remember_preferences=False))
+
+    record = memory.remember("User prefers concise answers", tags=["preference"])
+
+    assert record is None
+    assert memory.store.all() == []
+
+
+def test_policy_can_disable_task_memory():
+    memory = Memory(policy=MemoryPolicy(remember_tasks=False))
+
+    record = memory.remember("Follow up with the integration team", tags=["task"])
+
+    assert record is None
+    assert memory.store.all() == []
