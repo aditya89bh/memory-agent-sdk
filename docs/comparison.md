@@ -1,145 +1,96 @@
 # Memory Approach Comparison
 
-Memory Agent SDK is a small set of reusable primitives for building memory-aware agents.
+`memory-agent-sdk` is a lightweight set of memory primitives for agent builders who want memory behavior to be explicit, inspectable, and framework-neutral. It is not a full agent platform, a hosted memory service, or production infrastructure.
 
-It is not a full agent framework, vector database, hosted memory platform, or production-ready persistence layer. It focuses on the memory lifecycle itself: deciding what to remember, retrieving useful context, correcting stale information, forgetting intentionally, and making memory behavior observable through audit events.
+This page compares the SDK with common ways developers add memory to agents. The goal is positioning, not claiming that one approach is universally better.
 
-## Why Compare Memory Approaches?
+## Comparison table
 
-Many agents appear to have memory, but often rely on simple shortcuts:
-
-- keeping the full chat history
-- stuffing summaries into prompts
-- dumping everything into a vector database
-- using framework-level memory modules without clear correction or forgetting behavior
-- writing custom memory code for each project
-
-These approaches can work for prototypes, but they often make memory hard to inspect, repair, and govern.
-
-Memory Agent SDK exists to make memory behavior explicit.
-
-## Comparison Table
-
-| Approach | Strengths | Weaknesses | Best Use Case |
+| Approach | What it is good for | Typical tradeoffs | Where Memory Agent SDK fits |
 |---|---|---|---|
-| Raw chat history | Simple, transparent, no extra system needed | Grows quickly, expensive, noisy, no correction or forgetting model | Short conversations and early prototypes |
-| Prompt stuffing | Easy to implement, works with any LLM | Brittle, limited by context window, mixes relevant and irrelevant information | Small demos where memory is manually curated |
-| Vector database memory | Good for semantic recall and large memory sets | Often stores too much, correction is unclear, forgetting can be neglected, retrieval may be opaque | Knowledge-heavy systems that need semantic search |
-| Framework memory modules | Convenient, fast to integrate | Can hide memory behavior behind abstractions, may be tied to a specific framework | Apps already built inside a larger agent framework |
-| Full agent platforms | Broad functionality, orchestration, hosting, integrations | Heavyweight when only memory primitives are needed | Teams needing full-stack agent infrastructure |
-| Custom ad hoc memory code | Flexible and specific to the project | Hard to reuse, hard to test, easy to accumulate hidden behavior | One-off experiments or highly specialized systems |
-| Memory Agent SDK | Small, inspectable, focused on memory lifecycle, supports correction, forgetting, policies, and audit events | Experimental, limited retrieval sophistication, no production scaling guarantees yet | Developers who want reusable memory primitives without adopting a full framework |
+| Raw chat history | Keeping recent conversation context with almost no extra machinery. | Grows with the conversation, mixes useful facts with noise, and usually has no explicit correction, forgetting, or audit trail. | Adds structured long-term records alongside session memory, with lifecycle operations instead of replaying every turn. |
+| Prompt stuffing | Fast prototypes where the developer manually injects notes, summaries, or facts into the prompt. | Easy to start but hard to maintain as memory grows; provenance and cleanup are usually manual. | Provides explicit `remember`, `retrieve`, `correct`, and `forget` operations so prompt context can be built from selected records. |
+| Vector database memory | Semantic retrieval across large collections of embedded text. | Requires embeddings, external services or extra dependencies, retrieval evaluation, and separate lifecycle logic for correction and deletion. | Does not replace vector search. It offers standard-library local stores and deterministic retrieval primitives that can later be adapted to vector stores. |
+| Framework memory modules | Convenient memory features inside an agent framework. | Behavior may be coupled to that framework's abstractions, storage choices, or execution model. | Keeps memory primitives framework-neutral so they can be used from a plain Python loop, tests, examples, or future adapters. |
+| Full agent platforms | End-to-end orchestration, hosted tools, deployment, observability, and integrated memory features. | More capability, but also more platform commitment and often less control over low-level memory mechanics. | Focuses only on memory architecture primitives. It can support experiments before choosing a larger platform, but it is not a platform replacement. |
+| Custom ad hoc memory code | Maximum flexibility for one project and no dependency on a memory library. | Often starts simple but can become inconsistent: duplicated schemas, unclear retention rules, no correction history, and limited tests. | Provides reusable primitives and tests for common memory lifecycle concerns while still staying small and readable. |
 
-## When to Use Memory Agent SDK
+## When to use Memory Agent SDK
 
-Use this SDK when you want:
+Use `memory-agent-sdk` when you want to:
 
-- explicit memory primitives
-- local memory persistence
-- correction and forgetting flows
-- inspectable memory events
-- a lightweight memory layer for agent prototypes
-- a foundation for experimenting with memory architecture
-- a reusable package across multiple agent projects
+- prototype agent memory without adopting a full agent framework;
+- keep memory behavior visible in plain Python code;
+- separate session memory, long-term records, retrieval, policy, correction, forgetting, and audit events;
+- run local examples or tests without API keys, hosted services, or non-standard-library runtime dependencies;
+- demonstrate or teach memory lifecycle design;
+- build a foundation that could later gain adapters for vector stores, frameworks, or production storage.
 
-It is especially useful when you are building agents where memory should behave like a controllable system component, not an invisible side effect.
+## When not to use it
 
-## When Not to Use It
+Do not use the SDK as-is when you need:
 
-Do not use this SDK as-is when you need:
+- production-grade durability, backups, migrations, or recovery guarantees;
+- concurrent writers, distributed storage, or high-volume retrieval;
+- encryption, access control, tenancy, or regulated data governance;
+- semantic vector search over large corpora;
+- managed hosting, deployment, monitoring, or agent orchestration;
+- a mature ecosystem of integrations and production support.
 
-- production-grade security
-- encrypted storage
-- access control
-- distributed storage
-- high-concurrency guarantees
-- large-scale semantic search
-- hosted memory infrastructure
-- compliance-grade retention controls
+For those needs, a database, vector search system, agent framework, hosted platform, or custom production service may be the right choice. The SDK can still be useful as a reference for lifecycle concepts, but it should not be treated as hardened infrastructure.
 
-For those cases, this SDK should be treated as an architectural reference or starting point, not a finished production system.
+## What makes it different
 
-## What Makes It Different
+The SDK's main distinction is that it treats memory as a lifecycle, not just as stored text.
 
-The main difference is that Memory Agent SDK treats memory as a lifecycle.
+A memory can be created, retrieved, corrected, forgotten, expired, and audited. These operations are exposed as direct primitives instead of being hidden inside prompt construction or a framework callback. That makes the behavior easier to inspect during development and easier to test in small examples.
 
-A memory does not just get written once and live forever. It may need to be:
+The current implementation is intentionally modest:
 
-1. Created
-2. Retrieved
-3. Used
-4. Corrected
-5. Superseded
-6. Forgotten
-7. Audited
+- standard-library-first Python;
+- local in-memory, JSON, and SQLite stores;
+- deterministic retrieval using keyword overlap, recency, importance, and tags;
+- explicit correction and forgetting helpers;
+- audit events for major memory operations.
 
-This makes the SDK closer to a memory control layer than a storage wrapper.
+This is useful for learning, portfolio work, architecture experiments, and early prototypes. It is not evidence that the SDK outperforms vector search, agent frameworks, or production platforms on scale, retrieval quality, or operational maturity.
 
-## Why Correction Matters
+## Why correction and forgetting matter
 
-Agents often remember wrong things.
+Agent memory can become harmful when outdated or incorrect information keeps resurfacing. Raw history and simple note stores often preserve old statements even after the user corrects them. That can make an agent confidently repeat stale preferences, wrong facts, or decisions that have been reversed.
 
-A user may change preferences. A fact may become outdated. A previous assumption may be incorrect. If a memory system only supports adding new memories, it gradually accumulates contradictions.
+Correction and forgetting make memory maintenance explicit:
 
-Correction allows the system to repair memory without pretending the old version never existed.
+- **Correction** lets a newer memory supersede an older one without pretending the old record never existed.
+- **Forgetting** lets an agent stop using records that are irrelevant, expired, sensitive, or explicitly removed.
+- **Expiry** supports time-bound memory instead of treating every remembered fact as permanent.
 
-This matters for trust, debugging, and long-running agent behavior.
+These operations matter because long-term memory is not only about recall. It is also about knowing when not to recall something.
 
-## Why Forgetting Matters
+## Why audit events matter
 
-Forgetting is not a failure mode. It is a feature.
+Audit events help answer questions that are difficult to debug from final prompts alone:
 
-Without forgetting, memory systems become bloated, noisy, stale, and harder to govern. Useful memory requires boundaries.
+- What did the agent store?
+- Why did a record appear in retrieval results?
+- When was a memory corrected or forgotten?
+- Which records are active, superseded, expired, or inactive?
 
-Forgetting helps with:
+In early prototypes, audit events make memory behavior easier to inspect and explain. In production systems, auditability would need to be much stronger than the current SDK provides, but the primitive is included because observability is part of responsible memory design.
 
-- removing temporary state
-- deleting outdated preferences
-- reducing retrieval noise
-- respecting retention policies
-- keeping agent behavior focused
+## Honest limitations
 
-## Why Audit Events Matter
+`memory-agent-sdk` is experimental and intentionally small. Current limitations include:
 
-Memory behavior should be visible.
+- no concurrency guarantees;
+- no distributed storage;
+- no encryption or access-control layer;
+- no schema migration system;
+- no async API;
+- no vector database adapter in the core package;
+- limited retrieval sophistication compared with embedding-based semantic search;
+- no large-scale retrieval benchmarks;
+- no production privacy, retention, or compliance framework;
+- no full agent orchestration, tool routing, deployment, or hosted UI.
 
-If an agent retrieves, corrects, or forgets something, developers should be able to inspect that behavior. Audit events make the memory layer easier to debug and reason about.
-
-This is useful for:
-
-- understanding why an agent behaved a certain way
-- checking whether retrieval worked correctly
-- verifying correction and forgetting flows
-- building future memory evaluation tools
-
-## Current Limitations
-
-Memory Agent SDK is currently experimental.
-
-Known limitations:
-
-- retrieval is simple and local
-- no embedding-based retrieval yet
-- no vector store adapters yet
-- no async API
-- no concurrency guarantees
-- no encryption layer
-- no access control
-- no schema migration system
-- no production benchmarking
-- no hosted service
-
-These limitations are intentional for v0.1. The goal is to keep the foundation small, inspectable, and easy to extend.
-
-## Design Position
-
-Memory Agent SDK is for developers who want memory primitives without immediately adopting a full agent framework.
-
-It should be seen as:
-
-- smaller than a full agent platform
-- more structured than raw chat history
-- more lifecycle-aware than simple vector memory
-- more reusable than custom project-specific memory code
-
-The long-term direction is to become a practical memory infrastructure layer for agent developers.
+The SDK is best understood as a clean memory architecture toolkit for local development and demonstration. It gives developers explicit building blocks for memory behavior, while leaving production hardening and advanced retrieval integrations as future work.
