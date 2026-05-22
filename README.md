@@ -106,6 +106,8 @@ python examples/memory_lifecycle_demo.py
 | [Results](RESULTS.md) | Validation outputs and what the current examples prove. |
 | [Changelog](CHANGELOG.md) | Version history and shipped changes. |
 | [Contributing](CONTRIBUTING.md) | Local setup, contribution expectations, and project boundaries. |
+| [Contributor Norms](CONTRIBUTOR_NORMS.md) | Collaboration style, project boundaries, and contribution principles. |
+| [Security](SECURITY.md) | Security scope, sensitive data guidance, and production hardening notes. |
 
 ## Core primitives
 
