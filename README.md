@@ -91,6 +91,21 @@ Recommended first demo:
 python examples/memory_lifecycle_demo.py
 ```
 
+## Documentation
+
+| Document | Purpose |
+|---|---|
+| [API Reference](docs/api_reference.md) | Public SDK API and usage notes. |
+| [Architecture](docs/architecture.md) | How the memory components fit together. |
+| [Memory Lifecycle](docs/memory_lifecycle.md) | How memories move through remember, retrieve, correct, forget, and audit stages. |
+| [Retrieval Diagnostics](docs/retrieval_diagnostics.md) | How retrieval scoring works and how to debug unexpected results. |
+| [Comparison](docs/comparison.md) | How this approach compares to chat history, prompt stuffing, vector memory, and full agent platforms. |
+| [Production Readiness](docs/production_readiness.md) | Current maturity, gaps, and roadmap toward production-grade use. |
+| [Roadmap](docs/roadmap.md) | Planned future improvements. |
+| [Results](RESULTS.md) | Validation outputs and what the current examples prove. |
+| [Changelog](CHANGELOG.md) | Version history and shipped changes. |
+| [Contributing](CONTRIBUTING.md) | Local setup, contribution expectations, and project boundaries. |
+
 ## Core primitives
 
 | Primitive | Purpose |
