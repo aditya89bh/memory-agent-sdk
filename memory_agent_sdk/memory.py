@@ -4,7 +4,7 @@ from .events import AuditEvent, EventType
 from .exceptions import MemoryInputError
 from .forgetting import forget_by_id, forget_by_tag, forget_by_text, forget_expired
 from .policies import MemoryPolicy
-from .retrieval import retrieve_records
+from .retrieval import retrieve_records, retrieve_records_trace
 from .store import InMemoryStore, Store
 from .types import MemoryRecord
 class Memory:
@@ -15,6 +15,8 @@ class Memory:
         r=MemoryRecord(text=text,tags=tags,importance=importance,metadata=metadata or {},expires_at=expires_at); self.store.save(r); self.store.add_event(AuditEvent(EventType.MEMORY_CREATED,r.id,{"tags":tags})); return r
     def retrieve(self,query:str,tags=None,limit=5):
         self.forget_expired(); res=retrieve_records(self.store.all(),query,tags,limit); self.store.add_event(AuditEvent(EventType.MEMORY_RETRIEVED,None,{"query":query,"result_ids":[x.id for x in res]})); return res
+    def retrieve_trace(self,query:str,tags=None,limit=5):
+        self.forget_expired(); trace=retrieve_records_trace(self.store.all(),query,tags,limit); self.store.add_event(AuditEvent(EventType.MEMORY_RETRIEVED,None,{"query":query,"result_ids":[x.id for x in trace.results],"trace":True})); return trace
     def correct(self,new_text:str,memory_id=None,text_match=None,tags=None,importance=None): return correct_memory(self.store,memory_id=memory_id,text_match=text_match,new_text=new_text,tags=tags,importance=importance)
     def forget(self,memory_id=None,text_match=None,tag=None,soft_delete=True):
         if memory_id: return forget_by_id(self.store,memory_id,soft_delete)
