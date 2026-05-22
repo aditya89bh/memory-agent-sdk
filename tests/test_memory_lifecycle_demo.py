@@ -1,8 +1,11 @@
-from examples.memory_lifecycle_demo import main
+import runpy
+from pathlib import Path
 
 
 def test_memory_lifecycle_demo_runs(capsys):
-    main()
+    demo_path = Path(__file__).resolve().parents[1] / "examples" / "memory_lifecycle_demo.py"
+
+    runpy.run_path(str(demo_path), run_name="__main__")
     output = capsys.readouterr().out
 
     assert "Memory Agent SDK: Lifecycle Demo" in output
