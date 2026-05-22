@@ -18,6 +18,8 @@ When `Memory.retrieve()` is called, the SDK:
 8. Returns the top results.
 9. Records a `MEMORY_RETRIEVED` audit event.
 
+When `Memory.retrieve_trace()` is called, the SDK runs the same retrieval flow but also returns a `RetrievalTrace` object with candidate counts, returned results, and rejection reasons.
+
 ## Scoring Components
 
 ### Keyword Overlap
@@ -66,6 +68,30 @@ The current weighting favors keyword relevance first, then importance, then rece
 
 This keeps retrieval predictable and easy to debug.
 
+## Retrieval Trace
+
+Use `retrieve_trace()` when you need to inspect retrieval behavior.
+
+```python
+trace = memory.retrieve_trace("communication style", tags=["preference"])
+
+print(trace.candidates_seen)
+print(trace.candidates_scored)
+print(trace.results)
+print(trace.rejected)
+```
+
+A trace includes:
+
+| Field | Meaning |
+|---|---|
+| `query` | Query string used for retrieval. |
+| `requested_tags` | Tags requested by the caller. |
+| `candidates_seen` | Number of records considered. |
+| `candidates_scored` | Number of candidates scored after filters. |
+| `results` | Ranked `RetrievalResult` objects. |
+| `rejected` | Skipped records with rejection reasons. |
+
 ## Why a Memory May Not Be Returned
 
 A memory may be skipped if:
@@ -77,6 +103,13 @@ A memory may be skipped if:
 - it falls below the top result limit
 
 This is intentional. The SDK avoids returning unrelated memories just because they exist.
+
+With `retrieve_trace()`, skipped records can appear in `trace.rejected` with reasons such as:
+
+- `deleted`
+- `expired`
+- `tag_mismatch`
+- `no_keyword_overlap`
 
 ## Debugging Retrieval Behavior
 
@@ -90,6 +123,7 @@ If retrieval returns unexpected results, check:
 6. Is the memory importance too low?
 7. Is the result limit too small?
 8. Are there audit events confirming retrieval occurred?
+9. Does `retrieve_trace()` explain which records were rejected?
 
 ## Example
 
@@ -113,6 +147,21 @@ for result in results:
     print(result.text)
 ```
 
+## Trace Example
+
+```python
+trace = memory.retrieve_trace(
+    "How should I explain this technical concept?",
+    tags=["preference"],
+)
+
+for result in trace.results:
+    print(result.text, result.score)
+
+for rejected in trace.rejected:
+    print(rejected["id"], rejected["reason"])
+```
+
 ## Current Limitations
 
 Retrieval in v0.1 is intentionally simple.
@@ -123,8 +172,9 @@ Current limitations:
 - no semantic similarity
 - no vector store adapters
 - no query expansion
-- no retrieval tracing object yet
-- no per-result score explanation in the public API yet
+- no configurable scoring weights
+- no query token inspection on the trace object yet
+- no full score breakdown for rejected records yet
 - no benchmark suite for retrieval quality yet
 
 These are roadmap items, not missing accidents.
@@ -133,10 +183,9 @@ These are roadmap items, not missing accidents.
 
 Future versions could add:
 
-- retrieval trace objects
-- per-result score breakdowns
 - query token inspection
-- rejected-memory explanations
+- configurable retrieval weights
+- rejected-candidate score previews
 - retrieval quality tests
 - embedding adapter interfaces
 - vector store adapters
