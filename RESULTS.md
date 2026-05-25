@@ -72,6 +72,40 @@ Current benchmark coverage includes:
 - robotics memory retrieval
 - tag-based filtering
 
+## Task-agent demo validation
+
+Command:
+
+```bash
+python examples/task_agent_demo.py
+```
+
+The task-agent demo validates the SDK inside a small deterministic agent loop.
+
+It demonstrates:
+
+- seeding durable preference memory
+- seeding stale project memory
+- retrieving relevant memory with `retrieve_trace()`
+- using retrieved memory to influence a task decision
+- writing new project memory
+- correcting stale memory while preserving history
+- printing an audit trail
+
+Expected output sections:
+
+```text
+=== Seed memory ===
+=== Task ===
+=== Retrieved memory trace ===
+=== Decision ===
+=== Write new memory ===
+=== Correct stale memory ===
+=== Audit trail ===
+```
+
+Memory ids vary between runs, but the behavior should remain deterministic.
+
 ## Runnable examples
 
 The repo includes runnable examples for:
@@ -82,12 +116,14 @@ The repo includes runnable examples for:
 - forgetting
 - agent loop usage
 - full memory lifecycle demo
+- integrated task-agent demo
 
 ## What this proves
 
 - The package imports correctly from an editable install.
 - Memory records can be stored, retrieved, corrected, forgotten, expired, and audited.
 - Retrieval behavior can be inspected with trace objects.
+- Memory can influence a deterministic task-agent decision loop.
 - JSON and SQLite persistence are covered by tests.
 - Benchmark scenarios are runnable and CI-backed.
 - The repo now has developer-grade validation beyond simple examples.
@@ -99,4 +135,5 @@ The repo includes runnable examples for:
 - SQLite support is suitable for local experiments, not high-concurrency workloads.
 - Audit events are local SDK events, not external observability integrations.
 - Benchmark scenarios currently validate retrieval-style outcomes, not full multi-step agent workflows.
+- The task-agent demo is deterministic and does not call an LLM.
 - No external agent framework integrations are included yet.
