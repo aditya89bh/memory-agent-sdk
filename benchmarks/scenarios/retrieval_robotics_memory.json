@@ -1,0 +1,18 @@
+{
+  "name": "retrieval_robotics_memory",
+  "query": "robot deployment",
+  "tags": ["robotics"],
+  "memories": [
+    {
+      "text": "Robot deployment notes should include calibration checks",
+      "tags": ["robotics"],
+      "importance": 0.9
+    },
+    {
+      "text": "Writing docs should stay concise",
+      "tags": ["docs"],
+      "importance": 0.7
+    }
+  ],
+  "expected_result_texts": ["Robot deployment notes should include calibration checks"]
+}
