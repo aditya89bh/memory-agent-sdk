@@ -19,6 +19,7 @@ It provides reusable primitives for:
 - local persistence through in-memory, JSON, and SQLite stores
 - evaluation scenarios
 - benchmark scenario runner
+- integrated task-agent demo
 
 The repo is not production-ready infrastructure. It is currently best understood as a developer-grade SDK foundation for agent memory experimentation.
 
@@ -26,9 +27,9 @@ The repo is not production-ready infrastructure. It is currently best understood
 
 | Maturity Level | Estimated Status | Meaning |
 |---|---:|---|
-| Portfolio-grade | ~96% | Strong public artifact with clear thesis, examples, tests, docs, CI, and benchmark proof. |
-| Developer-grade | ~92-93% | Usable SDK foundation with typed package marker, linting, stronger tests, custom exceptions, inspectable retrieval, and CI-backed benchmarks. |
-| Production-grade | ~48-50% | Not production-ready yet; still missing security, migrations, concurrency, releases, and operational guarantees. |
+| Portfolio-grade | ~97% | Strong public artifact with clear thesis, examples, tests, docs, CI, benchmark proof, and an integrated demo. |
+| Developer-grade | ~93-94% | Usable SDK foundation with typed package marker, linting, stronger tests, custom exceptions, inspectable retrieval, CI-backed benchmarks, and a realistic task-agent demo. |
+| Production-grade | ~50% | Not production-ready yet; still missing security, migrations, concurrency, releases, and operational guarantees. |
 
 This score reflects the repo's current strength as a public developer tooling artifact, not as a hardened production package.
 
@@ -51,6 +52,7 @@ This score reflects the repo's current strength as a public developer tooling ar
 | Evaluation harness | Complete for v0.1 |
 | Benchmark scenario runner | Complete for v0.1 |
 | Benchmark results snapshot | Complete |
+| Integrated task-agent demo | Complete for v0.1 |
 | Custom SDK exceptions | Complete |
 | Typed package marker | Complete |
 | Ruff linting in CI | Complete |
@@ -62,6 +64,7 @@ This score reflects the repo's current strength as a public developer tooling ar
 | API reference | Complete |
 | Retrieval diagnostics | Complete |
 | Benchmark documentation | Complete |
+| Task-agent demo documentation | Complete |
 | Production-readiness roadmap | Complete |
 | Developer-grade hardening roadmap | Complete |
 | Security policy | Complete |
@@ -75,6 +78,7 @@ The repo currently includes:
 
 - install instructions
 - runnable examples
+- integrated task-agent demo
 - `pytest` test suite
 - Ruff linting in CI
 - benchmark runner in CI
@@ -91,7 +95,7 @@ The repo currently includes:
 - retrieval trace tests
 - evaluation harness tests
 - benchmark scenarios for retrieval, policy filtering, robotics memory, and tag filtering
-- documentation for retrieval diagnostics, evaluation, benchmarks, and production-readiness gaps
+- documentation for retrieval diagnostics, evaluation, benchmarks, task-agent demo, and production-readiness gaps
 
 The CI badge in the README provides public validation that tests, lint checks, and benchmarks pass on supported Python versions.
 
@@ -102,6 +106,7 @@ The following areas are intentionally experimental or limited:
 - retrieval is keyword-based, not semantic
 - retrieval tracing is useful but still simple
 - benchmark scenarios validate retrieval-style outcomes, not full multi-step workflows yet
+- task-agent demo is deterministic and does not call an LLM
 - no embedding adapter yet
 - no vector store integration yet
 - no async API
@@ -123,12 +128,12 @@ The repo is strong because it is focused.
 It does not try to become a full agent framework. It focuses on memory as a lifecycle:
 
 ```text
-remember -> retrieve -> trace -> evaluate -> correct -> forget -> audit
+remember -> retrieve -> trace -> evaluate -> decide -> correct -> forget -> audit
 ```
 
 This gives the repo a clear point of view:
 
-> Agent memory should be explicit, inspectable, correctable, forgettable, auditable, and testable.
+> Agent memory should be explicit, inspectable, correctable, forgettable, auditable, testable, and useful inside a decision loop.
 
 That positioning is stronger than a generic agent demo.
 
@@ -136,13 +141,13 @@ That positioning is stronger than a generic agent demo.
 
 The repo still lacks:
 
-1. A richer integrated demo that feels closer to a real agent workflow.
-2. Multi-step benchmark scenarios for correction, forgetting, and expiry flows.
-3. Optional adapter interfaces for embeddings or vector stores.
-4. Packaged release artifacts.
-5. Visual assets such as a terminal GIF or rendered architecture diagram.
-6. Stronger formatting/type-checking gates beyond basic Ruff linting.
-7. A formal backwards-compatibility policy.
+1. Multi-step benchmark scenarios for correction, forgetting, and expiry flows.
+2. Optional adapter interfaces for embeddings or vector stores.
+3. Packaged release artifacts.
+4. Visual assets such as a terminal GIF or rendered architecture diagram.
+5. Stronger formatting/type-checking gates beyond basic Ruff linting.
+6. A formal backwards-compatibility policy.
+7. Optional real LLM adapter examples.
 
 None of these block the repo from being developer-grade, but they would move it closer to a serious open-source developer tool.
 
@@ -150,17 +155,17 @@ None of these block the repo from being developer-grade, but they would move it 
 
 Recommended next improvements:
 
-1. Add an integrated task-agent demo using the SDK primitives.
-2. Expand benchmarks into multi-step correction, forgetting, and expiry scenarios.
-3. Add optional adapter interfaces for embeddings and vector stores without adding hard dependencies.
-4. Add formatting/type-checking gates beyond basic Ruff linting.
-5. Add visual assets: terminal GIF, architecture diagram, and lifecycle diagram image.
+1. Expand benchmarks into multi-step correction, forgetting, and expiry scenarios.
+2. Add optional adapter interfaces for embeddings and vector stores without adding hard dependencies.
+3. Add formatting/type-checking gates beyond basic Ruff linting.
+4. Add visual assets: terminal GIF, architecture diagram, and lifecycle diagram image.
+5. Add a package release workflow when the API boundary feels stable.
 
 ## Not Recommended Yet
 
 Avoid adding the following too early:
 
-- LLM API dependencies
+- hard LLM API dependencies
 - LangChain/LlamaIndex dependency lock-in
 - hosted service integrations
 - production claims
@@ -181,8 +186,9 @@ It communicates:
 - honest scope control
 - package-level maturity signals
 - benchmark-backed validation
+- an integrated task-agent usage pattern
 - a differentiated view of agent memory
 
 For a developer-grade ecosystem/tooling repo, it is now in strong shape.
 
-The next phase should focus less on generic polish and more on deeper technical differentiation: integrated demos, multi-step benchmarks, and adapter boundaries.
+The next phase should focus less on generic polish and more on deeper technical differentiation: multi-step benchmarks, adapter boundaries, and deeper explainability around memory-driven decisions.
