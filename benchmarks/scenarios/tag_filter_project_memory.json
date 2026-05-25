@@ -1,0 +1,18 @@
+{
+  "name": "tag_filter_project_memory",
+  "query": "project note",
+  "tags": ["project"],
+  "memories": [
+    {
+      "text": "Temporary note should be ignored later",
+      "tags": ["temporary"],
+      "importance": 0.2
+    },
+    {
+      "text": "Durable project note should remain",
+      "tags": ["project"],
+      "importance": 0.9
+    }
+  ],
+  "expected_result_texts": ["Durable project note should remain"]
+}
