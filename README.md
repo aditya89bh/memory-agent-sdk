@@ -57,9 +57,8 @@ Current developer-grade signals:
 - GitHub Actions test matrix for Python 3.10, 3.11, and 3.12
 - custom SDK exceptions
 - retrieval trace API for inspectable ranking behavior
-- memory evaluation harness
-| [Benchmarks](docs/benchmarks.md) | How to run benchmark scenarios and interpret 
-results. |
+- memory evaluation harness and benchmark runner
+- integrated task-agent demo
 - JSON and SQLite persistence tests
 - policy, correction, forgetting, expiry, and serialization tests
 - release checklist, security notes, contributor docs, issue templates, and PR template
@@ -114,12 +113,13 @@ python examples/correction_demo.py
 python examples/forgetting_demo.py
 python examples/agent_loop_demo.py
 python examples/memory_lifecycle_demo.py
+python examples/task_agent_demo.py
 ```
 
 Recommended first demo:
 
 ```bash
-python examples/memory_lifecycle_demo.py
+python examples/task_agent_demo.py
 ```
 
 ## Documentation
@@ -133,6 +133,8 @@ python examples/memory_lifecycle_demo.py
 | [Retrieval Diagnostics](docs/retrieval_diagnostics.md) | How retrieval scoring works and how to debug unexpected results. |
 | [Retrieval Trace API](docs/retrieval_trace_api.md) | How to inspect candidates, scores, rejection reasons, and traced retrieval events. |
 | [Evaluation Harness](docs/evaluation_harness.md) | How to define memory scenarios and evaluate expected retrieval behavior. |
+| [Benchmarks](docs/benchmarks.md) | How to run benchmark scenarios and interpret results. |
+| [Task Agent Demo](docs/task_agent_demo.md) | How the SDK works inside a small inspectable agent loop. |
 | [Comparison](docs/comparison.md) | How this approach compares to chat history, prompt stuffing, vector memory, and full agent platforms. |
 | [Production Readiness](docs/production_readiness.md) | Current maturity, gaps, and roadmap toward production-grade use. |
 | [Developer-Grade Hardening](docs/developer_grade_hardening.md) | Maturity path from portfolio-grade repo to reusable developer tool. |
@@ -179,6 +181,7 @@ This repo is an experimental SDK foundation for demonstrating memory architectur
 
 ```bash
 pytest
+python benchmarks/run_benchmarks.py
 ```
 
 ## Roadmap
@@ -186,5 +189,5 @@ pytest
 - Add richer policy hooks for custom memory filtering.
 - Add deterministic summarization helpers.
 - Add import/export utilities for memory records and audit logs.
-- Expand the memory evaluation harness into benchmark scenarios.
+- Expand the memory evaluation harness into multi-step benchmark scenarios.
 - Add optional adapter interfaces for embeddings and vector stores later, while keeping the core dependency-free.
