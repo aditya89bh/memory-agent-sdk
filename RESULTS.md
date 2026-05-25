@@ -1,26 +1,16 @@
 # Validation Results
 
-This document captures real validation output from the local `memory-agent-sdk` repository.
-
-## Environment
-
-Validation was run from the repository root with the project virtual environment activated:
-
-```bash
-source .venv/bin/activate
-```
+This document captures validation evidence for `memory-agent-sdk`.
 
 ## Install validation
 
-The package was previously installed in editable development mode with:
+The package installs in editable development mode with:
 
 ```bash
 pip install -e ".[dev]"
 ```
 
-The validation commands below import and execute the installed package successfully from the active virtual environment.
-
-## Pytest validation
+## Test validation
 
 Command:
 
@@ -28,67 +18,85 @@ Command:
 pytest
 ```
 
-Output:
+Current CI runs the test suite across Python 3.10, 3.11, and 3.12.
 
-```text
-============================= test session starts ==============================
-platform linux -- Python 3.11.15, pytest-9.0.3, pluggy-1.6.0
-rootdir: /home/owlnuc12/memory-agent-sdk
-configfile: pyproject.toml
-collected 11 items
+The suite covers:
 
-tests/test_correction.py ..                                              [ 18%]
-tests/test_forgetting.py ...                                             [ 45%]
-tests/test_policies.py ...                                               [ 72%]
-tests/test_retrieval.py ..                                               [ 90%]
-tests/test_session_memory.py .                                           [100%]
+- session memory
+- retrieval
+- retrieval traces
+- correction
+- forgetting
+- expiry
+- memory policies
+- custom exceptions
+- JSON and SQLite persistence
+- store serialization
+- evaluation harness behavior
 
-============================== 11 passed in 0.05s ==============================
-```
-
-## Basic session memory example
+## Benchmark validation
 
 Command:
 
 ```bash
-python examples/basic_session_memory.py
+python benchmarks/run_benchmarks.py
 ```
 
-Output:
+Observed local output:
 
 ```text
-user: Remember that I prefer concise answers.
-assistant: Got it.
+Memory benchmark report
+total: 5
+passed: 5
+failed: 0
+success_rate: 1.00
+
+[PASS] policy_small_talk_memory
+[PASS] retrieval_preference
+[PASS] retrieval_project_memory
+[PASS] retrieval_robotics_memory
+[PASS] tag_filter_project_memory
 ```
 
-## Agent loop demo
-
-Command:
-
-```bash
-python examples/agent_loop_demo.py
-```
-
-Output:
+Snapshot file:
 
 ```text
-Using memory: I prefer concise technical answers.
-Using memory: I prefer concise technical answers.
+benchmarks/results/latest_results.json
 ```
+
+Current benchmark coverage includes:
+
+- small-talk policy filtering
+- preference retrieval
+- project memory retrieval
+- robotics memory retrieval
+- tag-based filtering
+
+## Runnable examples
+
+The repo includes runnable examples for:
+
+- basic session memory
+- retrieval
+- correction
+- forgetting
+- agent loop usage
+- full memory lifecycle demo
 
 ## What this proves
 
-- The package imports correctly from the active editable install.
-- Session memory can add turns and summarize them in order.
-- Long-term memory can remember and retrieve relevant information inside a simple agent loop.
-- Correction, forgetting, policies, retrieval, SQLite persistence, and session memory are covered by tests.
-- The examples are runnable with standard Python commands from the repository root.
+- The package imports correctly from an editable install.
+- Memory records can be stored, retrieved, corrected, forgotten, expired, and audited.
+- Retrieval behavior can be inspected with trace objects.
+- JSON and SQLite persistence are covered by tests.
+- Benchmark scenarios are runnable and CI-backed.
+- The repo now has developer-grade validation beyond simple examples.
 
 ## Current limitations
 
-- v0.1 uses simple keyword/recency/importance retrieval, not embeddings or semantic vector search.
-- Stores are lightweight local implementations, not production-grade distributed persistence.
-- SQLite support is suitable for local experiments, not high-concurrency production workloads.
-- Audit events are local SDK events, not integrated with external observability systems.
-- Memory policies are intentionally simple and rule-based.
+- Retrieval is keyword, recency, importance, and tag based, not semantic/vector based.
+- Stores are lightweight local implementations, not distributed production stores.
+- SQLite support is suitable for local experiments, not high-concurrency workloads.
+- Audit events are local SDK events, not external observability integrations.
+- Benchmark scenarios currently validate retrieval-style outcomes, not full multi-step agent workflows.
 - No external agent framework integrations are included yet.
