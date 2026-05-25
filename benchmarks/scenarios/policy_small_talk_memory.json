@@ -1,0 +1,17 @@
+{
+  "name": "policy_small_talk_memory",
+  "query": "hello",
+  "memories": [
+    {
+      "text": "hello",
+      "tags": ["small-talk"],
+      "importance": 0.1
+    },
+    {
+      "text": "User prefers local-only examples",
+      "tags": ["preference"],
+      "importance": 0.8
+    }
+  ],
+  "expected_result_texts": []
+}
