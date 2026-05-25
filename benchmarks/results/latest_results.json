@@ -1,0 +1,13 @@
+{
+  "total": 5,
+  "passed": 5,
+  "failed": 0,
+  "success_rate": 1.0,
+  "scenarios": [
+    "policy_small_talk_memory",
+    "retrieval_preference",
+    "retrieval_project_memory",
+    "retrieval_robotics_memory",
+    "tag_filter_project_memory"
+  ]
+}
