@@ -58,6 +58,8 @@ Current developer-grade signals:
 - custom SDK exceptions
 - retrieval trace API for inspectable ranking behavior
 - memory evaluation harness
+| [Benchmarks](docs/benchmarks.md) | How to run benchmark scenarios and interpret 
+results. |
 - JSON and SQLite persistence tests
 - policy, correction, forgetting, expiry, and serialization tests
 - release checklist, security notes, contributor docs, issue templates, and PR template
