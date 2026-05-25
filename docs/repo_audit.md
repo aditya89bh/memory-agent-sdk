@@ -17,6 +17,8 @@ It provides reusable primitives for:
 - memory policies
 - audit events
 - local persistence through in-memory, JSON, and SQLite stores
+- evaluation scenarios
+- benchmark scenario runner
 
 The repo is not production-ready infrastructure. It is currently best understood as a developer-grade SDK foundation for agent memory experimentation.
 
@@ -24,9 +26,9 @@ The repo is not production-ready infrastructure. It is currently best understood
 
 | Maturity Level | Estimated Status | Meaning |
 |---|---:|---|
-| Portfolio-grade | ~95% | Strong public artifact with clear thesis, examples, tests, docs, and CI. |
-| Developer-grade | ~88-90% | Usable SDK foundation with typed package marker, linting, stronger tests, custom exceptions, and inspectable retrieval. |
-| Production-grade | ~45% | Not production-ready yet; still missing security, migrations, concurrency, releases, and operational guarantees. |
+| Portfolio-grade | ~96% | Strong public artifact with clear thesis, examples, tests, docs, CI, and benchmark proof. |
+| Developer-grade | ~92-93% | Usable SDK foundation with typed package marker, linting, stronger tests, custom exceptions, inspectable retrieval, and CI-backed benchmarks. |
+| Production-grade | ~48-50% | Not production-ready yet; still missing security, migrations, concurrency, releases, and operational guarantees. |
 
 This score reflects the repo's current strength as a public developer tooling artifact, not as a hardened production package.
 
@@ -46,6 +48,9 @@ This score reflects the repo's current strength as a public developer tooling ar
 | Correction flow | Complete for v0.1 |
 | Forgetting flow | Complete for v0.1 |
 | Audit events | Complete for v0.1 |
+| Evaluation harness | Complete for v0.1 |
+| Benchmark scenario runner | Complete for v0.1 |
+| Benchmark results snapshot | Complete |
 | Custom SDK exceptions | Complete |
 | Typed package marker | Complete |
 | Ruff linting in CI | Complete |
@@ -56,6 +61,7 @@ This score reflects the repo's current strength as a public developer tooling ar
 | Documentation index | Complete |
 | API reference | Complete |
 | Retrieval diagnostics | Complete |
+| Benchmark documentation | Complete |
 | Production-readiness roadmap | Complete |
 | Developer-grade hardening roadmap | Complete |
 | Security policy | Complete |
@@ -71,8 +77,10 @@ The repo currently includes:
 - runnable examples
 - `pytest` test suite
 - Ruff linting in CI
+- benchmark runner in CI
 - GitHub Actions CI across Python 3.10, 3.11, and 3.12
 - `RESULTS.md`
+- `benchmarks/results/latest_results.json`
 - persistence tests for JSON and SQLite stores
 - store serialization tests
 - policy behavior tests
@@ -81,9 +89,11 @@ The repo currently includes:
 - expiry behavior tests
 - custom exception tests
 - retrieval trace tests
-- documentation for retrieval diagnostics and production-readiness gaps
+- evaluation harness tests
+- benchmark scenarios for retrieval, policy filtering, robotics memory, and tag filtering
+- documentation for retrieval diagnostics, evaluation, benchmarks, and production-readiness gaps
 
-The CI badge in the README provides public validation that tests and lint checks pass on supported Python versions.
+The CI badge in the README provides public validation that tests, lint checks, and benchmarks pass on supported Python versions.
 
 ## What Is Still Experimental
 
@@ -91,6 +101,7 @@ The following areas are intentionally experimental or limited:
 
 - retrieval is keyword-based, not semantic
 - retrieval tracing is useful but still simple
+- benchmark scenarios validate retrieval-style outcomes, not full multi-step workflows yet
 - no embedding adapter yet
 - no vector store integration yet
 - no async API
@@ -99,7 +110,6 @@ The following areas are intentionally experimental or limited:
 - no encryption layer
 - no access control
 - no hosted memory service
-- no memory evaluation benchmark harness
 - no production-grade retention policy engine
 - no formal backwards-compatibility policy
 - no package publishing workflow yet
@@ -113,12 +123,12 @@ The repo is strong because it is focused.
 It does not try to become a full agent framework. It focuses on memory as a lifecycle:
 
 ```text
-remember -> retrieve -> trace -> correct -> forget -> audit
+remember -> retrieve -> trace -> evaluate -> correct -> forget -> audit
 ```
 
 This gives the repo a clear point of view:
 
-> Agent memory should be explicit, inspectable, correctable, forgettable, and auditable.
+> Agent memory should be explicit, inspectable, correctable, forgettable, auditable, and testable.
 
 That positioning is stronger than a generic agent demo.
 
@@ -127,7 +137,7 @@ That positioning is stronger than a generic agent demo.
 The repo still lacks:
 
 1. A richer integrated demo that feels closer to a real agent workflow.
-2. A memory evaluation harness.
+2. Multi-step benchmark scenarios for correction, forgetting, and expiry flows.
 3. Optional adapter interfaces for embeddings or vector stores.
 4. Packaged release artifacts.
 5. Visual assets such as a terminal GIF or rendered architecture diagram.
@@ -140,8 +150,8 @@ None of these block the repo from being developer-grade, but they would move it 
 
 Recommended next improvements:
 
-1. Add a memory evaluation harness for retrieval/correction/forgetting scenarios.
-2. Add an integrated task-agent demo using the SDK primitives.
+1. Add an integrated task-agent demo using the SDK primitives.
+2. Expand benchmarks into multi-step correction, forgetting, and expiry scenarios.
 3. Add optional adapter interfaces for embeddings and vector stores without adding hard dependencies.
 4. Add formatting/type-checking gates beyond basic Ruff linting.
 5. Add visual assets: terminal GIF, architecture diagram, and lifecycle diagram image.
@@ -170,8 +180,9 @@ It communicates:
 - documentation maturity
 - honest scope control
 - package-level maturity signals
+- benchmark-backed validation
 - a differentiated view of agent memory
 
 For a developer-grade ecosystem/tooling repo, it is now in strong shape.
 
-The next phase should focus less on generic polish and more on deeper technical differentiation: evaluation harnesses, integrated demos, and adapter boundaries.
+The next phase should focus less on generic polish and more on deeper technical differentiation: integrated demos, multi-step benchmarks, and adapter boundaries.
