@@ -57,6 +57,7 @@ Current developer-grade signals:
 - GitHub Actions test matrix for Python 3.10, 3.11, and 3.12
 - custom SDK exceptions
 - retrieval trace API for inspectable ranking behavior
+- memory evaluation harness
 - JSON and SQLite persistence tests
 - policy, correction, forgetting, expiry, and serialization tests
 - release checklist, security notes, contributor docs, issue templates, and PR template
@@ -129,6 +130,7 @@ python examples/memory_lifecycle_demo.py
 | [Memory Lifecycle Diagram](docs/memory_lifecycle_diagram.md) | Visual ASCII diagram of the memory loop and where each primitive fits. |
 | [Retrieval Diagnostics](docs/retrieval_diagnostics.md) | How retrieval scoring works and how to debug unexpected results. |
 | [Retrieval Trace API](docs/retrieval_trace_api.md) | How to inspect candidates, scores, rejection reasons, and traced retrieval events. |
+| [Evaluation Harness](docs/evaluation_harness.md) | How to define memory scenarios and evaluate expected retrieval behavior. |
 | [Comparison](docs/comparison.md) | How this approach compares to chat history, prompt stuffing, vector memory, and full agent platforms. |
 | [Production Readiness](docs/production_readiness.md) | Current maturity, gaps, and roadmap toward production-grade use. |
 | [Developer-Grade Hardening](docs/developer_grade_hardening.md) | Maturity path from portfolio-grade repo to reusable developer tool. |
@@ -153,6 +155,7 @@ python examples/memory_lifecycle_demo.py
 | `JSONStore` | Simple file-backed persistence for small local projects. |
 | `SQLiteStore` | Durable local persistence using the Python standard library. |
 | `RetrievalTrace` | Diagnostic object for inspecting retrieval candidates, scores, and rejection reasons. |
+| `EvaluationScenario` | Declarative scenario object for testing expected memory retrieval behavior. |
 | Retrieval helpers | Keyword overlap, recency, importance, and tag-based filtering. |
 | Correction helpers | Supersede old memory records while preserving history. |
 | Forgetting helpers | Soft-delete memories by id, text match, tag, or expiry. |
@@ -181,5 +184,5 @@ pytest
 - Add richer policy hooks for custom memory filtering.
 - Add deterministic summarization helpers.
 - Add import/export utilities for memory records and audit logs.
-- Add memory evaluation harnesses.
+- Expand the memory evaluation harness into benchmark scenarios.
 - Add optional adapter interfaces for embeddings and vector stores later, while keeping the core dependency-free.
